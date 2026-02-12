@@ -98,6 +98,11 @@ function defineBestHand(cards: Card[]): BestHand | undefined {
   if (straightFlush) {
     return { cards: straightFlush, handStrentgh: HandStrength.StraightFlush }
   }
+
+  const fourOfAKind = isFourOfAKind(cards);
+  if (fourOfAKind) {
+    return { cards: fourOfAKind, handStrentgh: HandStrength.FourOfAKind }
+  }
 }
 
 function isRoyalFlushCards(cards: Card[]): FiveCards | false {
@@ -173,4 +178,25 @@ function isStraightFlush(cards: Card[]): FiveCards | false {
   }
 
   return false
+}
+
+function isFourOfAKind(cards: Card[]): FiveCards | false {
+  const counts: Record<string, number> = {}
+
+  for (const card of cards) {
+    const val = card.value
+    counts[val] = (counts[val] || 0) + 1
+  }
+
+  const quadValue = Object.keys(counts).find(val => counts[val] === 4) as CardValue | undefined
+
+  if (!quadValue) return false
+
+  const quadCards = cards.filter(c => c.value === quadValue)
+
+  const bestKicker = cards
+    .filter(c => c.value !== quadValue)
+    .sort((a, b) => CardStrength[b.value] - CardStrength[a.value])[0]
+
+  return [...quadCards, bestKicker] as FiveCards
 }
