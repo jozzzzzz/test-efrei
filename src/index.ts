@@ -10,7 +10,7 @@ interface Card {
   value: string
 }
 
-type Board = [
+type FiveCards = [
   Card,
   Card,
   Card,
@@ -43,10 +43,19 @@ enum HandStrength {
 }
 
 interface GameResult {
-  outcome: HandStrength
+  outcome: FiveCards
   result: Result
 }
 
-function HandEvaluator(board: Board, firstHand: Hand, secondHand: Hand): GameResult {
+function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
 
+}
+
+function defineBestHand(cards: Card[]): FiveCards {
+  let royalFlush = false;
+  for (let i = 0; i < cards.length; i++) {
+    if (cards[i].value === "A") 
+  }
+
+  return [cards[0], cards[1], cards[2], cards[3], cards[4]];
 }
