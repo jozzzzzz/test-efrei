@@ -359,12 +359,12 @@ export function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Han
   const comparison = compareHands(player1Best, player2Best)
 
   if (comparison > 0) {
-    return { outcome: player1Best.handStrength, result: Result.Player1 }
+    return { outcome: player1Best.cards, result: Result.Player1 }
   }
   else if (comparison < 0) {
-    return { outcome: player2Best.handStrength, result: Result.Player2 }
+    return { outcome: player2Best.cards, result: Result.Player2 }
   }
   else {
-    return { outcome: player1Best.handStrength, result: Result.Tie }
+    return { outcome: player1Best.cards, result: Result.Tie }
   }
 }
