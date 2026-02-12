@@ -16,11 +16,17 @@ enum Result {
   Player2,
 }
 
-enum Outcome {
-  HighHand,
-  Pair,
-  DoublePair,
-  Full,
+enum HandStrength {
+  HighCard,
+  OnePair,
+  TwoPair,
+  ThreeOfAKind,
+  Straight,
+  Flush,
+  FullHouse,
+  FourOfAKind,
+  StraightFlush,
+  RoyalFlush,
 }
 
 interface GameResult {
