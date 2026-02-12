@@ -22,10 +22,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.Jack },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.King },
+        { color: Color.Club, value: CardValue.Nine },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Five },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.HighCard)
+      expect(result.handStrength).toBe(HandStrength.HighCard)
       expect(result.result).toBe(Result.Player1)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -49,10 +58,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.King },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Club, value: CardValue.King },
+        { color: Color.Spade, value: CardValue.King },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Five },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.OnePair)
+      expect(result.handStrength).toBe(HandStrength.OnePair)
       expect(result.result).toBe(Result.Player2)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -76,10 +94,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.Queen },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Diamond, value: CardValue.Five },
+        { color: Color.Heart, value: CardValue.Two },
+        { color: Color.Spade, value: CardValue.Two },
+        { color: Color.Club, value: CardValue.Eight },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.TwoPair)
+      expect(result.handStrength).toBe(HandStrength.TwoPair)
       expect(result.result).toBe(Result.Player1)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -103,10 +130,19 @@ describe('HandEvaluator', () => {
         { color: Color.Diamond, value: CardValue.Two },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Heart, value: CardValue.Nine },
+        { color: Color.Spade, value: CardValue.Nine },
+        { color: Color.Club, value: CardValue.Nine },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Club, value: CardValue.Five },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.ThreeOfAKind)
+      expect(result.handStrength).toBe(HandStrength.ThreeOfAKind)
       expect(result.result).toBe(Result.Player2)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -130,10 +166,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.Queen },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Diamond, value: CardValue.Eight },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Six },
+        { color: Color.Heart, value: CardValue.Five },
+        { color: Color.Heart, value: CardValue.Four },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.Straight)
+      expect(result.handStrength).toBe(HandStrength.Straight)
       expect(result.result).toBe(Result.Player1)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -157,10 +202,19 @@ describe('HandEvaluator', () => {
         { color: Color.Club, value: CardValue.Queen },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Club, value: CardValue.King },
+        { color: Color.Club, value: CardValue.Queen },
+        { color: Color.Club, value: CardValue.Nine },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Club, value: CardValue.Two },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.Flush)
+      expect(result.handStrength).toBe(HandStrength.Flush)
       expect(result.result).toBe(Result.Player2)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -184,10 +238,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.Queen },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Heart, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Seven },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Spade, value: CardValue.Three },
+        { color: Color.Diamond, value: CardValue.Three },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.FullHouse)
+      expect(result.handStrength).toBe(HandStrength.FullHouse)
       expect(result.result).toBe(Result.Player1)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -211,10 +274,19 @@ describe('HandEvaluator', () => {
         { color: Color.Diamond, value: CardValue.Eight },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Heart, value: CardValue.Eight },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Spade, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Five },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.FourOfAKind)
+      expect(result.handStrength).toBe(HandStrength.FourOfAKind)
       expect(result.result).toBe(Result.Player2)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -238,10 +310,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.Queen },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Heart, value: CardValue.Eight },
+        { color: Color.Heart, value: CardValue.Seven },
+        { color: Color.Heart, value: CardValue.Six },
+        { color: Color.Heart, value: CardValue.Five },
+        { color: Color.Heart, value: CardValue.Four },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.StraightFlush)
+      expect(result.handStrength).toBe(HandStrength.StraightFlush)
       expect(result.result).toBe(Result.Player1)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 
@@ -265,10 +346,19 @@ describe('HandEvaluator', () => {
         { color: Color.Spade, value: CardValue.Ace },
       ]
 
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Spade, value: CardValue.Ace },
+        { color: Color.Spade, value: CardValue.King },
+        { color: Color.Spade, value: CardValue.Queen },
+        { color: Color.Spade, value: CardValue.Jack },
+        { color: Color.Spade, value: CardValue.Ten },
+      ]
+
       const result = HandEvaluator(board, player1Hand, player2Hand)
 
-      expect(result.outcome).toBe(HandStrength.RoyalFlush)
+      expect(result.handStrength).toBe(HandStrength.RoyalFlush)
       expect(result.result).toBe(Result.Player2)
+      expect(result.outcome).toEqual(expectedHandStrength)
     })
   })
 })

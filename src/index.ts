@@ -76,7 +76,7 @@ export const CardStrength: Record<CardValue, number> = {
 
 export interface GameResult {
   outcome: FiveCards
-  result: Result,
+  result: Result
   handStrength: HandStrength
 }
 
@@ -288,52 +288,52 @@ function getHighCard(cards: Card[]): FiveCards {
 function evaluateBestHand(cards: Card[]): BestHand {
   const royalFlush = findRoyalFlush(cards)
   if (royalFlush) {
-    return { cards: royalFlush, handStrength: HandStrength.RoyalFlush}
+    return { cards: royalFlush, handStrength: HandStrength.RoyalFlush }
   }
 
   const straightFlush = findStraightFlush(cards)
   if (straightFlush) {
-    return { cards: straightFlush, handStrength: HandStrength.StraightFlush}
+    return { cards: straightFlush, handStrength: HandStrength.StraightFlush }
   }
 
   const fourOfAKind = findFourOfAKind(cards)
   if (fourOfAKind) {
-    return { cards: fourOfAKind, handStrength: HandStrength.FourOfAKind}
+    return { cards: fourOfAKind, handStrength: HandStrength.FourOfAKind }
   }
 
   const fullHouse = findFullHouse(cards)
   if (fullHouse) {
-    return { cards: fullHouse, handStrength: HandStrength.FullHouse}
+    return { cards: fullHouse, handStrength: HandStrength.FullHouse }
   }
 
   const flush = findFlush(cards)
   if (flush) {
-    return { cards: flush, handStrength: HandStrength.Flush}
+    return { cards: flush, handStrength: HandStrength.Flush }
   }
 
   const straight = findStraight(cards)
   if (straight) {
-    return { cards: straight, handStrength: HandStrength.Straight}
+    return { cards: straight, handStrength: HandStrength.Straight }
   }
 
   const threeOfAKind = findThreeOfAKind(cards)
   if (threeOfAKind) {
-    return { cards: threeOfAKind, handStrength: HandStrength.ThreeOfAKind}
+    return { cards: threeOfAKind, handStrength: HandStrength.ThreeOfAKind }
   }
 
   const twoPair = findTwoPair(cards)
   if (twoPair) {
-    return { cards: twoPair, handStrength: HandStrength.TwoPair}
+    return { cards: twoPair, handStrength: HandStrength.TwoPair }
   }
 
   const onePair = findOnePair(cards)
   if (onePair) {
-    return { cards: onePair, handStrength: HandStrength.OnePair}
+    return { cards: onePair, handStrength: HandStrength.OnePair }
   }
 
   const result = getHighCard(cards)
   const handStrength = HandStrength.HighCard
-  return { cards: result, handStrength}
+  return { cards: result, handStrength }
 }
 
 function compareHands(hand1: BestHand, hand2: BestHand): number {
