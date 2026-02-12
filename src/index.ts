@@ -1,35 +1,35 @@
-enum Color {
+export enum Color {
   Hearth,
   Club,
   Spade,
   Diamond,
 }
 
-interface Card {
+export interface Card {
   color: Color
   value: string
 }
 
-type Board = [
+export type Board = [
   Card,
   Card,
   Card,
   Card,
-  Card
+  Card,
 ]
 
-type Hand = [
+export type Hand = [
   Card,
-  Card
+  Card,
 ]
 
-enum Result {
+export enum Result {
   Tie,
   Player1,
   Player2,
 }
 
-enum HandStrength {
+export enum HandStrength {
   RoyalFlush = 10,
   StraightFlush = 9,
   FourOfAKind = 8,
@@ -42,11 +42,11 @@ enum HandStrength {
   HighCard = 1,
 }
 
-interface GameResult {
+export interface GameResult {
   outcome: HandStrength
   result: Result
 }
 
-function HandEvaluator(board: Board, firstHand: Hand, secondHand: Hand): GameResult {
+export function HandEvaluator(board: Board, firstHand: Hand, secondHand: Hand): GameResult {
 
 }
