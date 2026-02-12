@@ -6,19 +6,19 @@ export enum Color {
 }
 
 export enum CardValue {
-  Two = "2",
-  Three = "3",
-  Four = "4",
-  Five = "5",
-  Six = "6",
-  Seven = "7",
-  Eight = "8",
-  Nine = "9",
-  Ten = "10",
-  Jack = "J",
-  Queen = "Q",
-  King = "K",
-  Ace = "A"
+  Two = '2',
+  Three = '3',
+  Four = '4',
+  Five = '5',
+  Six = '6',
+  Seven = '7',
+  Eight = '8',
+  Nine = '9',
+  Ten = '10',
+  Jack = 'J',
+  Queen = 'Q',
+  King = 'K',
+  Ace = 'A',
 }
 
 export interface Card {
@@ -31,7 +31,7 @@ export type FiveCards = [
   Card,
   Card,
   Card,
-  Card
+  Card,
 ]
 
 export type Hand = [
@@ -80,123 +80,291 @@ export interface GameResult {
 }
 
 interface BestHand {
-  cards: FiveCards,
-  handStrentgh: HandStrength
+  cards: FiveCards
+  handStrength: HandStrength
+}
+
+function sortByStrength(cards: Card[]): Card[] {
+  return [...cards].sort((a, b) => CardStrength[b.value] - CardStrength[a.value])
+}
+
+function getValueCounts(cards: Card[]): Map<CardValue, number> {
+  const counts = new Map<CardValue, number>()
+  for (const card of cards) {
+    counts.set(card.value, (counts.get(card.value) || 0) + 1)
+  }
+  return counts
+}
+
+function getColorCounts(cards: Card[]): Map<Color, Card[]> {
+  const counts = new Map<Color, Card[]>()
+  for (const card of cards) {
+    if (!counts.has(card.color)) {
+      counts.set(card.color, [])
+    }
+    counts.get(card.color)!.push(card)
+  }
+  return counts
+}
+
+function findFlush(cards: Card[]): FiveCards | false {
+  const colorCounts = getColorCounts(cards)
+  for (const [, colorCards] of colorCounts) {
+    if (colorCards.length >= 5) {
+      const sorted = sortByStrength(colorCards)
+      return [sorted[0], sorted[1], sorted[2], sorted[3], sorted[4]]
+    }
+  }
+  return false
+}
+
+function findStraight(cards: Card[]): FiveCards | false {
+  const uniqueValues = [...new Set(cards.map(c => CardStrength[c.value]))].sort((a, b) => b - a)
+
+  if (uniqueValues.includes(14) && uniqueValues.includes(2) && uniqueValues.includes(3) && uniqueValues.includes(4) && uniqueValues.includes(5)) {
+    const straightCards: Card[] = []
+    for (const val of [5, 4, 3, 2, 14]) {
+      const card = cards.find(c => CardStrength[c.value] === val)
+      if (card)
+        straightCards.push(card)
+    }
+    if (straightCards.length === 5) {
+      return straightCards as FiveCards
+    }
+  }
+
+  for (let i = 0; i <= uniqueValues.length - 5; i++) {
+    const slice = uniqueValues.slice(i, i + 5)
+    if (slice[0] - slice[4] === 4) {
+      const straightCards: Card[] = []
+      for (const val of slice) {
+        const card = cards.find(c => CardStrength[c.value] === val && !straightCards.includes(c))
+        if (card)
+          straightCards.push(card)
+      }
+      if (straightCards.length === 5) {
+        return straightCards as FiveCards
+      }
+    }
+  }
+  return false
+}
+
+function findStraightFlush(cards: Card[]): FiveCards | false {
+  const colorCounts = getColorCounts(cards)
+  for (const [, colorCards] of colorCounts) {
+    if (colorCards.length >= 5) {
+      const straight = findStraight(colorCards)
+      if (straight) {
+        return straight
+      }
+    }
+  }
+  return false
+}
+
+function findRoyalFlush(cards: Card[]): FiveCards | false {
+  const straightFlush = findStraightFlush(cards)
+  if (straightFlush && CardStrength[straightFlush[0].value] === 14) {
+    const values = straightFlush.map(c => CardStrength[c.value])
+    if (values.includes(14) && values.includes(13) && values.includes(12) && values.includes(11) && values.includes(10)) {
+      return straightFlush
+    }
+  }
+  return false
+}
+
+function findFourOfAKind(cards: Card[]): FiveCards | false {
+  const valueCounts = getValueCounts(cards)
+  for (const [value, count] of valueCounts) {
+    if (count === 4) {
+      const fourCards = cards.filter(c => c.value === value)
+      const kicker = sortByStrength(cards.filter(c => c.value !== value))[0]
+      return [fourCards[0], fourCards[1], fourCards[2], fourCards[3], kicker]
+    }
+  }
+  return false
+}
+
+function findFullHouse(cards: Card[]): FiveCards | false {
+  const valueCounts = getValueCounts(cards)
+  let threeValue: CardValue | null = null
+  let pairValue: CardValue | null = null
+
+  const threes: CardValue[] = []
+  const pairs: CardValue[] = []
+
+  for (const [value, count] of valueCounts) {
+    if (count >= 3)
+      threes.push(value)
+    if (count >= 2)
+      pairs.push(value)
+  }
+
+  if (threes.length === 0)
+    return false
+
+  threes.sort((a, b) => CardStrength[b] - CardStrength[a])
+  threeValue = threes[0]
+
+  const availablePairs = pairs.filter(v => v !== threeValue)
+  if (availablePairs.length === 0 && threes.length < 2)
+    return false
+
+  if (availablePairs.length > 0) {
+    availablePairs.sort((a, b) => CardStrength[b] - CardStrength[a])
+    pairValue = availablePairs[0]
+  }
+  else {
+    pairValue = threes[1]
+  }
+
+  const threeCards = cards.filter(c => c.value === threeValue).slice(0, 3)
+  const pairCards = cards.filter(c => c.value === pairValue).slice(0, 2)
+
+  return [threeCards[0], threeCards[1], threeCards[2], pairCards[0], pairCards[1]]
+}
+
+function findThreeOfAKind(cards: Card[]): FiveCards | false {
+  const valueCounts = getValueCounts(cards)
+  for (const [value, count] of valueCounts) {
+    if (count === 3) {
+      const threeCards = cards.filter(c => c.value === value)
+      const kickers = sortByStrength(cards.filter(c => c.value !== value)).slice(0, 2)
+      return [threeCards[0], threeCards[1], threeCards[2], kickers[0], kickers[1]]
+    }
+  }
+  return false
+}
+
+function findTwoPair(cards: Card[]): FiveCards | false {
+  const valueCounts = getValueCounts(cards)
+  const pairs: CardValue[] = []
+
+  for (const [value, count] of valueCounts) {
+    if (count >= 2)
+      pairs.push(value)
+  }
+
+  if (pairs.length < 2)
+    return false
+
+  pairs.sort((a, b) => CardStrength[b] - CardStrength[a])
+
+  const pair1 = cards.filter(c => c.value === pairs[0]).slice(0, 2)
+  const pair2 = cards.filter(c => c.value === pairs[1]).slice(0, 2)
+  const kicker = sortByStrength(cards.filter(c => c.value !== pairs[0] && c.value !== pairs[1]))[0]
+
+  return [pair1[0], pair1[1], pair2[0], pair2[1], kicker]
+}
+
+function findOnePair(cards: Card[]): FiveCards | false {
+  const valueCounts = getValueCounts(cards)
+  const pairs: CardValue[] = []
+
+  for (const [value, count] of valueCounts) {
+    if (count >= 2)
+      pairs.push(value)
+  }
+
+  if (pairs.length === 0)
+    return false
+
+  pairs.sort((a, b) => CardStrength[b] - CardStrength[a])
+  const pairValue = pairs[0]
+
+  const pairCards = cards.filter(c => c.value === pairValue).slice(0, 2)
+  const kickers = sortByStrength(cards.filter(c => c.value !== pairValue)).slice(0, 3)
+
+  return [pairCards[0], pairCards[1], kickers[0], kickers[1], kickers[2]]
+}
+
+function getHighCard(cards: Card[]): FiveCards {
+  const sorted = sortByStrength(cards)
+  return [sorted[0], sorted[1], sorted[2], sorted[3], sorted[4]]
+}
+
+function evaluateBestHand(cards: Card[]): BestHand {
+  const royalFlush = findRoyalFlush(cards)
+  if (royalFlush) {
+    return { cards: royalFlush, handStrength: HandStrength.RoyalFlush}
+  }
+
+  const straightFlush = findStraightFlush(cards)
+  if (straightFlush) {
+    return { cards: straightFlush, handStrength: HandStrength.StraightFlush}
+  }
+
+  const fourOfAKind = findFourOfAKind(cards)
+  if (fourOfAKind) {
+    return { cards: fourOfAKind, handStrength: HandStrength.FourOfAKind}
+  }
+
+  const fullHouse = findFullHouse(cards)
+  if (fullHouse) {
+    return { cards: fullHouse, handStrength: HandStrength.FullHouse}
+  }
+
+  const flush = findFlush(cards)
+  if (flush) {
+    return { cards: flush, handStrength: HandStrength.Flush}
+  }
+
+  const straight = findStraight(cards)
+  if (straight) {
+    return { cards: straight, handStrength: HandStrength.Straight}
+  }
+
+  const threeOfAKind = findThreeOfAKind(cards)
+  if (threeOfAKind) {
+    return { cards: threeOfAKind, handStrength: HandStrength.ThreeOfAKind}
+  }
+
+  const twoPair = findTwoPair(cards)
+  if (twoPair) {
+    return { cards: twoPair, handStrength: HandStrength.TwoPair}
+  }
+
+  const onePair = findOnePair(cards)
+  if (onePair) {
+    return { cards: onePair, handStrength: HandStrength.OnePair}
+  }
+
+  const result = getHighCard(cards)
+  const handStrength = HandStrength.HighCard
+  return { cards: result, handStrength}
+}
+
+function compareHands(hand1: BestHand, hand2: BestHand): number {
+  if (hand1.handStrength !== hand2.handStrength) {
+    return hand1.handStrength - hand2.handStrength
+  }
+
+  for (let i = 0; i < hand1.cards.length; i++) {
+    if (hand1.cards[i] !== hand2.cards[i]) {
+      return CardStrength[hand1.cards[i].value] - CardStrength[hand2.cards[i].value]
+    }
+  }
+
+  return 0
 }
 
 export function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
+  const player1Cards = [...board, ...firstHand]
+  const player2Cards = [...board, ...secondHand]
 
-}
+  const player1Best = evaluateBestHand(player1Cards)
+  const player2Best = evaluateBestHand(player2Cards)
 
-function defineBestHand(cards: Card[]): BestHand | undefined {
-  const royalFlush = isRoyalFlushCards(cards);
-  if (royalFlush) {
-    return { cards: royalFlush, handStrentgh: HandStrength.RoyalFlush }
+  const comparison = compareHands(player1Best, player2Best)
+
+  if (comparison > 0) {
+    return { outcome: player1Best.handStrength, result: Result.Player1 }
   }
-
-  const straightFlush = isStraightFlush(cards);
-  if (straightFlush) {
-    return { cards: straightFlush, handStrentgh: HandStrength.StraightFlush }
+  else if (comparison < 0) {
+    return { outcome: player2Best.handStrength, result: Result.Player2 }
   }
-
-  const fourOfAKind = isFourOfAKind(cards);
-  if (fourOfAKind) {
-    return { cards: fourOfAKind, handStrentgh: HandStrength.FourOfAKind }
+  else {
+    return { outcome: player1Best.handStrength, result: Result.Tie }
   }
-}
-
-function isRoyalFlushCards(cards: Card[]): FiveCards | false {
-  const suits = [Color.Heart, Color.Club, Color.Spade, Color.Diamond]
-  const royalValues = ['10', 'J', 'Q', 'K', 'A'];
-
-  for (const suit of suits) {
-    const sameColorCards = cards.filter(card => card.color === suit)
-
-    if (sameColorCards.length < 5) continue
-
-    const royalCards: Card[] = []
-    
-    for (const val of royalValues) {
-      const foundCard = sameColorCards.find(c => c.value === val)
-      if (foundCard) {
-        royalCards.push(foundCard)
-      }
-    }
-
-    if (royalCards.length === 5) {
-      return royalCards as FiveCards
-    }
-  }
-
-  return false
-}
-
-function isStraightFlush(cards: Card[]): FiveCards | false {
-  const suits = [Color.Heart, Color.Club, Color.Spade, Color.Diamond]
-
-  for (const suit of suits) {
-    const suitCards = cards.filter(c => c.color === suit)
-    if (suitCards.length < 5) continue
-
-    const sorted = suitCards.sort((a, b) => CardStrength[b.value] - CardStrength[a.value])
-
-    for (let i = 0; i <= sorted.length - 5; i++) {
-      const sequence: Card[] = [sorted[i]]
-      
-      for (let j = i + 1; j < sorted.length; j++) {
-        const lastCardValue = CardStrength[sequence[sequence.length - 1].value]
-        const currentCardValue = CardStrength[sorted[j].value]
-
-        if (lastCardValue - currentCardValue === 1) {
-          sequence.push(sorted[j])
-        } else if (lastCardValue === currentCardValue) {
-          continue
-        } else {
-          break
-        }
-
-        if (sequence.length === 5) {
-          return sequence as FiveCards
-        }
-      }
-    }
-
-    // case if straight is A, 2, 3, 4, 5
-    const values = suitCards.map(c => CardStrength[c.value])
-    const aceLowValues = [14, 5, 4, 3, 2]
-    
-    if (aceLowValues.every(v => values.includes(v))) {
-      const wheel = [
-        suitCards.find(c => CardStrength[c.value] === 5)!,
-        suitCards.find(c => CardStrength[c.value] === 4)!,
-        suitCards.find(c => CardStrength[c.value] === 3)!,
-        suitCards.find(c => CardStrength[c.value] === 2)!,
-        suitCards.find(c => CardStrength[c.value] === 14)!,
-      ]
-      return wheel as FiveCards
-    }
-  }
-
-  return false
-}
-
-function isFourOfAKind(cards: Card[]): FiveCards | false {
-  const counts: Record<string, number> = {}
-
-  for (const card of cards) {
-    const val = card.value
-    counts[val] = (counts[val] || 0) + 1
-  }
-
-  const quadValue = Object.keys(counts).find(val => counts[val] === 4) as CardValue | undefined
-
-  if (!quadValue) return false
-
-  const quadCards = cards.filter(c => c.value === quadValue)
-
-  const bestKicker = cards
-    .filter(c => c.value !== quadValue)
-    .sort((a, b) => CardStrength[b.value] - CardStrength[a.value])[0]
-
-  return [...quadCards, bestKicker] as FiveCards
 }
