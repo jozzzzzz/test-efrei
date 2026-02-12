@@ -5,9 +5,25 @@ export enum Color {
   Diamond,
 }
 
+export enum CardValue {
+  Two = "2",
+  Three = "3",
+  Four = "4",
+  Five = "5",
+  Six = "6",
+  Seven = "7",
+  Eight = "8",
+  Nine = "9",
+  Ten = "10",
+  Jack = "J",
+  Queen = "Q",
+  King = "K",
+  Ace = "A"
+}
+
 export interface Card {
   color: Color
-  value: string
+  value: CardValue
 }
 
 export type FiveCards = [
@@ -42,6 +58,22 @@ export enum HandStrength {
   HighCard = 1,
 }
 
+export const CardStrength: Record<CardValue, number> = {
+  [CardValue.Two]: 2,
+  [CardValue.Three]: 3,
+  [CardValue.Four]: 4,
+  [CardValue.Five]: 5,
+  [CardValue.Six]: 6,
+  [CardValue.Seven]: 7,
+  [CardValue.Eight]: 8,
+  [CardValue.Nine]: 9,
+  [CardValue.Ten]: 10,
+  [CardValue.Jack]: 11,
+  [CardValue.Queen]: 12,
+  [CardValue.King]: 13,
+  [CardValue.Ace]: 14,
+};
+
 export interface GameResult {
   outcome: FiveCards
   result: Result
@@ -52,7 +84,7 @@ interface BestHand {
   handStrentgh: HandStrength
 }
 
-function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
+export function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
 
 }
 
@@ -87,4 +119,9 @@ function isRoyalFlushCards(cards: Card[]): FiveCards | false {
   }
 
   return false;
+}
+
+function isStraightFlush(cards: Card[]): FiveCards | false {
+  const suits = [Color.Heart, Color.Club, Color.Spade, Color.Diamond];
+
 }
