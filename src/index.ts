@@ -10,11 +10,12 @@ export interface Card {
   value: string
 }
 
-type FiveCards = [
+export type FiveCards = [
   Card,
   Card,
   Card,
   Card,
+  Card
 ]
 
 export type Hand = [
@@ -41,12 +42,12 @@ export enum HandStrength {
   HighCard = 1,
 }
 
-interface GameResult {
+export interface GameResult {
   outcome: FiveCards
   result: Result
 }
 
-function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
+export function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
 
 }
 

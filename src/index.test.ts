@@ -1,9 +1,9 @@
-import type { Board, Hand } from './index'
+import type { FiveCards, Hand } from './index'
 import { Color, HandEvaluator, HandStrength, Result } from './index'
 
-describe('handEvaluator', () => {
+describe('pairs', () => {
   it('should detect a pair of aces for player 1', () => {
-    const board: Board = [
+    const board: FiveCards = [
       { color: Color.Hearth, value: '2' },
       { color: Color.Club, value: '5' },
       { color: Color.Spade, value: '7' },
