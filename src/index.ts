@@ -15,7 +15,7 @@ export type FiveCards = [
   Card,
   Card,
   Card,
-  Card,
+  Card
 ]
 
 export type Hand = [
@@ -42,7 +42,7 @@ export enum HandStrength {
   HighCard = 1,
 }
 
-interface GameResult {
+export interface GameResult {
   outcome: FiveCards
   result: Result
 }
