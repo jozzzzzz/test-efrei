@@ -58,7 +58,7 @@ function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): Gam
 
 function defineBestHand(cards: Card[]): BestHand | undefined {
   const royalFlush = isRoyalFlushCards(cards);
-  if (royalFlush !== false) {
+  if (royalFlush) {
     return { cards: royalFlush, handStrentgh: HandStrength.RoyalFlush };
   }
 }
