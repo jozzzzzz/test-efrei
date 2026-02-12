@@ -1,5 +1,5 @@
 export enum Color {
-  Hearth,
+  Heart,
   Club,
   Spade,
   Diamond,
@@ -10,7 +10,8 @@ export interface Card {
   value: string
 }
 
-type FiveCards = [
+export type FiveCards = [
+  Card,
   Card,
   Card,
   Card,
@@ -46,15 +47,44 @@ interface GameResult {
   result: Result
 }
 
+interface BestHand {
+  cards: FiveCards,
+  handStrentgh: HandStrength
+}
+
 function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Hand): GameResult {
 
 }
 
-function defineBestHand(cards: Card[]): FiveCards {
-  let royalFlush = false;
-  for (let i = 0; i < cards.length; i++) {
-    if (cards[i].value === "A") 
+function defineBestHand(cards: Card[]): BestHand | undefined {
+  const royalFlush = isRoyalFlushCards(cards);
+  if (royalFlush !== false) {
+    return { cards: royalFlush, handStrentgh: HandStrength.RoyalFlush };
+  }
+}
+
+function isRoyalFlushCards(cards: Card[]): FiveCards | false {
+  const suits = [Color.Heart, Color.Club, Color.Spade, Color.Diamond];
+  const royalValues = ['10', 'J', 'Q', 'K', 'A'];
+
+  for (const suit of suits) {
+    const sameColorCards = cards.filter(card => card.color === suit);
+
+    if (sameColorCards.length < 5) continue;
+
+    const royalCards: Card[] = [];
+    
+    for (const val of royalValues) {
+      const foundCard = sameColorCards.find(c => c.value === val);
+      if (foundCard) {
+        royalCards.push(foundCard);
+      }
+    }
+
+    if (royalCards.length === 5) {
+      return royalCards as FiveCards;
+    }
   }
 
-  return [cards[0], cards[1], cards[2], cards[3], cards[4]];
+  return false;
 }
