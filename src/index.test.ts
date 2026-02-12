@@ -524,6 +524,40 @@ describe('HandEvaluator', () => {
       expect(result.result).toBe(Result.Player2)
       expect(result.outcome).toEqual(expectedHandStrength)
     })
+
+    it('should tie-break full house by pair - player 1 wins with higher pair', () => {
+      const board: FiveCards = [
+        { color: Color.Heart, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Seven },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Diamond, value: CardValue.Four },
+      ]
+
+      const player1Hand: Hand = [
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.Ace },
+      ]
+
+      const player2Hand: Hand = [
+        { color: Color.Spade, value: CardValue.Jack },
+        { color: Color.Diamond, value: CardValue.Jack },
+      ]
+
+      const expectedHandStrength: FiveCards = [
+        { color: Color.Heart, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Seven },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.Ace },
+      ]
+
+      const result = HandEvaluator(board, player1Hand, player2Hand)
+
+      expect(result.handStrength).toBe(HandStrength.FullHouse)
+      expect(result.result).toBe(Result.Player1)
+      expect(result.outcome).toEqual(expectedHandStrength)
+    })
   })
 
   describe('FourOfAKind', () => {
