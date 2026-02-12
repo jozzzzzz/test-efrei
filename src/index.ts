@@ -342,8 +342,10 @@ function compareHands(hand1: BestHand, hand2: BestHand): number {
   }
 
   for (let i = 0; i < hand1.cards.length; i++) {
-    if (hand1.cards[i] !== hand2.cards[i]) {
-      return CardStrength[hand1.cards[i].value] - CardStrength[hand2.cards[i].value]
+    const strength1 = CardStrength[hand1.cards[i].value]
+    const strength2 = CardStrength[hand2.cards[i].value]
+    if (strength1 !== strength2) {
+      return strength1 - strength2
     }
   }
 
