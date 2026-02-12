@@ -1,11 +1,11 @@
-enum Color {
+export enum Color {
   Hearth,
   Club,
   Spade,
   Diamond,
 }
 
-interface Card {
+export interface Card {
   color: Color
   value: string
 }
@@ -15,21 +15,20 @@ type FiveCards = [
   Card,
   Card,
   Card,
-  Card
 ]
 
-type Hand = [
+export type Hand = [
   Card,
-  Card
+  Card,
 ]
 
-enum Result {
+export enum Result {
   Tie,
   Player1,
   Player2,
 }
 
-enum HandStrength {
+export enum HandStrength {
   RoyalFlush = 10,
   StraightFlush = 9,
   FourOfAKind = 8,
