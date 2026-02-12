@@ -8,6 +8,7 @@
     "module": "ESNext",
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "types": ["vitest/globals"],
     /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
