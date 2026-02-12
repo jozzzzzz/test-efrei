@@ -1,25 +1,25 @@
 import type { FiveCards, Hand } from './index'
-import { Color, HandEvaluator, HandStrength, Result } from './index'
+import { CardValue, Color, HandEvaluator, HandStrength, Result } from './index'
 
 describe('HandEvaluator', () => {
   describe('HighCard', () => {
     it('should detect high card and player 1 wins with Ace high', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '2' },
-        { color: Color.Club, value: '5' },
-        { color: Color.Spade, value: '7' },
-        { color: Color.Club, value: '9' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Heart, value: CardValue.Two },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Nine },
+        { color: Color.Diamond, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: 'A' },
-        { color: Color.Diamond, value: 'K' },
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.King },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'Q' },
-        { color: Color.Spade, value: 'J' },
+        { color: Color.Club, value: CardValue.Queen },
+        { color: Color.Spade, value: CardValue.Jack },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -32,21 +32,21 @@ describe('HandEvaluator', () => {
   describe('OnePair', () => {
     it('should detect a pair of kings for player 2', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '2' },
-        { color: Color.Club, value: '5' },
-        { color: Color.Spade, value: '7' },
-        { color: Color.Club, value: '8' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Heart, value: CardValue.Two },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: 'A' },
-        { color: Color.Diamond, value: 'Q' },
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.Queen },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'K' },
-        { color: Color.Spade, value: 'K' },
+        { color: Color.Club, value: CardValue.King },
+        { color: Color.Spade, value: CardValue.King },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -59,21 +59,21 @@ describe('HandEvaluator', () => {
   describe('TwoPair', () => {
     it('should detect two pairs for player 1', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '2' },
-        { color: Color.Club, value: '5' },
-        { color: Color.Spade, value: '7' },
-        { color: Color.Club, value: '8' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Heart, value: CardValue.Two },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Spade, value: '2' },
-        { color: Color.Diamond, value: '5' },
+        { color: Color.Spade, value: CardValue.Two },
+        { color: Color.Diamond, value: CardValue.Five },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'K' },
-        { color: Color.Spade, value: 'Q' },
+        { color: Color.Club, value: CardValue.King },
+        { color: Color.Spade, value: CardValue.Queen },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -86,21 +86,21 @@ describe('HandEvaluator', () => {
   describe('ThreeOfAKind', () => {
     it('should detect three of a kind for player 2', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '9' },
-        { color: Color.Club, value: '5' },
-        { color: Color.Spade, value: '9' },
-        { color: Color.Club, value: '8' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Heart, value: CardValue.Nine },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Spade, value: CardValue.Nine },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: 'A' },
-        { color: Color.Diamond, value: 'K' },
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.King },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: '9' },
-        { color: Color.Diamond, value: '2' },
+        { color: Color.Club, value: CardValue.Nine },
+        { color: Color.Diamond, value: CardValue.Two },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -113,21 +113,21 @@ describe('HandEvaluator', () => {
   describe('Straight', () => {
     it('should detect a straight for player 1', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '5' },
-        { color: Color.Club, value: '6' },
-        { color: Color.Spade, value: '7' },
-        { color: Color.Club, value: '2' },
-        { color: Color.Diamond, value: 'K' },
+        { color: Color.Heart, value: CardValue.Five },
+        { color: Color.Club, value: CardValue.Six },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Two },
+        { color: Color.Diamond, value: CardValue.King },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: '4' },
-        { color: Color.Diamond, value: '8' },
+        { color: Color.Heart, value: CardValue.Four },
+        { color: Color.Diamond, value: CardValue.Eight },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'A' },
-        { color: Color.Spade, value: 'Q' },
+        { color: Color.Club, value: CardValue.Ace },
+        { color: Color.Spade, value: CardValue.Queen },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -140,21 +140,21 @@ describe('HandEvaluator', () => {
   describe('Flush', () => {
     it('should detect a flush for player 2', () => {
       const board: FiveCards = [
-        { color: Color.Club, value: '2' },
-        { color: Color.Club, value: '5' },
-        { color: Color.Club, value: '9' },
-        { color: Color.Hearth, value: '8' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Club, value: CardValue.Two },
+        { color: Color.Club, value: CardValue.Five },
+        { color: Color.Club, value: CardValue.Nine },
+        { color: Color.Heart, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: 'A' },
-        { color: Color.Diamond, value: 'K' },
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.King },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'K' },
-        { color: Color.Club, value: 'Q' },
+        { color: Color.Club, value: CardValue.King },
+        { color: Color.Club, value: CardValue.Queen },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -167,21 +167,21 @@ describe('HandEvaluator', () => {
   describe('FullHouse', () => {
     it('should detect a full house for player 1', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '7' },
-        { color: Color.Club, value: '7' },
-        { color: Color.Spade, value: '3' },
-        { color: Color.Club, value: '8' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Heart, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Seven },
+        { color: Color.Spade, value: CardValue.Three },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Spade, value: '7' },
-        { color: Color.Diamond, value: '3' },
+        { color: Color.Spade, value: CardValue.Seven },
+        { color: Color.Diamond, value: CardValue.Three },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'K' },
-        { color: Color.Spade, value: 'Q' },
+        { color: Color.Club, value: CardValue.King },
+        { color: Color.Spade, value: CardValue.Queen },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -194,21 +194,21 @@ describe('HandEvaluator', () => {
   describe('FourOfAKind', () => {
     it('should detect four of a kind for player 2', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '8' },
-        { color: Color.Club, value: '8' },
-        { color: Color.Spade, value: '3' },
-        { color: Color.Diamond, value: '5' },
-        { color: Color.Diamond, value: '4' },
+        { color: Color.Heart, value: CardValue.Eight },
+        { color: Color.Club, value: CardValue.Eight },
+        { color: Color.Spade, value: CardValue.Three },
+        { color: Color.Diamond, value: CardValue.Five },
+        { color: Color.Heart, value: CardValue.Four },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: 'A' },
-        { color: Color.Diamond, value: 'K' },
+        { color: Color.Heart, value: CardValue.Ace },
+        { color: Color.Diamond, value: CardValue.King },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Spade, value: '8' },
-        { color: Color.Diamond, value: '8' },
+        { color: Color.Spade, value: CardValue.Eight },
+        { color: Color.Diamond, value: CardValue.Eight },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -221,21 +221,21 @@ describe('HandEvaluator', () => {
   describe('StraightFlush', () => {
     it('should detect a straight flush for player 1', () => {
       const board: FiveCards = [
-        { color: Color.Hearth, value: '5' },
-        { color: Color.Hearth, value: '6' },
-        { color: Color.Hearth, value: '7' },
-        { color: Color.Club, value: '2' },
-        { color: Color.Diamond, value: 'K' },
+        { color: Color.Heart, value: CardValue.Five },
+        { color: Color.Heart, value: CardValue.Six },
+        { color: Color.Heart, value: CardValue.Seven },
+        { color: Color.Club, value: CardValue.Two },
+        { color: Color.Diamond, value: CardValue.King },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Hearth, value: '4' },
-        { color: Color.Hearth, value: '8' },
+        { color: Color.Heart, value: CardValue.Four },
+        { color: Color.Heart, value: CardValue.Eight },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Club, value: 'A' },
-        { color: Color.Spade, value: 'Q' },
+        { color: Color.Club, value: CardValue.Ace },
+        { color: Color.Spade, value: CardValue.Queen },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
@@ -248,21 +248,21 @@ describe('HandEvaluator', () => {
   describe('RoyalFlush', () => {
     it('should detect a royal flush for player 2', () => {
       const board: FiveCards = [
-        { color: Color.Spade, value: '10' },
-        { color: Color.Spade, value: 'J' },
-        { color: Color.Spade, value: 'Q' },
-        { color: Color.Club, value: '2' },
-        { color: Color.Diamond, value: '3' },
+        { color: Color.Spade, value: CardValue.Ten },
+        { color: Color.Spade, value: CardValue.Jack },
+        { color: Color.Spade, value: CardValue.Queen },
+        { color: Color.Club, value: CardValue.Two },
+        { color: Color.Diamond, value: CardValue.Three },
       ]
 
       const player1Hand: Hand = [
-        { color: Color.Club, value: 'A' },
-        { color: Color.Hearth, value: 'K' },
+        { color: Color.Club, value: CardValue.Ace },
+        { color: Color.Heart, value: CardValue.King },
       ]
 
       const player2Hand: Hand = [
-        { color: Color.Spade, value: 'K' },
-        { color: Color.Spade, value: 'A' },
+        { color: Color.Spade, value: CardValue.King },
+        { color: Color.Spade, value: CardValue.Ace },
       ]
 
       const result = HandEvaluator(board, player1Hand, player2Hand)
