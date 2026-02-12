@@ -52,9 +52,11 @@ export function HandEvaluator(board: FiveCards, firstHand: Hand, secondHand: Han
 }
 
 function defineBestHand(cards: Card[]): FiveCards {
-  let royalFlush = false;
+  const royalFlush = false;
   for (let i = 0; i < cards.length; i++) {
-    if (cards[i].value === "A") 
+    if (cards[i].value === "A") {
+      // TODO: implement
+    }
   }
 
   return [cards[0], cards[1], cards[2], cards[3], cards[4]];
